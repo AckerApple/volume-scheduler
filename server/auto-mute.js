@@ -17,9 +17,6 @@ const mins = [
 ]
 
 const hour1 = 3600000
-const nowDate = new Date()
-const currentDayMs = new Date(nowDate.getFullYear(), nowDate.getMonth()-1, nowDate.getDate(), 0, 0, 0).getTime()
-const currentTimeMs = (hour1*nowDate.getHours()) + (mins[1]*nowDate.getMinutes())
 let tsIndex = 0
 
 function scheduleNext(){
@@ -28,6 +25,10 @@ function scheduleNext(){
 }
 
 function scheduleTimeSheet(timeSheet){
+  const nowDate = new Date()
+  const currentDayMs = new Date(nowDate.getFullYear(), nowDate.getMonth()-1, nowDate.getDate(), 0, 0, 0).getTime()
+  const currentTimeMs = (hour1*nowDate.getHours()) + (mins[1]*nowDate.getMinutes())
+
   if( timeSheet.atTime < currentTimeMs ){
     log.log("skipped",log.dateShortTime(currentDayMs+timeSheet.atTime))
     scheduleNext()
@@ -38,9 +39,8 @@ function scheduleTimeSheet(timeSheet){
   const runMins = timeSheet.timeLength/60/1000
   setTimeout(()=>{
     log.log("running mute for", timeSheet.timeLength/60/1000,"mins")
-    airFoil.run(0, runMins)
-
-    scheduleNext()
+    
+    airFoil.run(0, runMins).then(()=>scheduleNext()).catch(()=>scheduleNext())
   }, diff)
 
   log.log(
