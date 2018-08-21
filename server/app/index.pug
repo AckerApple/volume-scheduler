@@ -1,0 +1,103 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no")
+
+    style.
+      html{
+        font-size:17px;
+      }
+
+      html{
+        font-family:Helvetica;
+        -webkit-text-size-adjust: none;
+      }
+
+      button{
+        font-size:inherit;
+      }
+
+      html,body{margin:0;padding:0;height:100%;}
+    
+      * {box-sizing:border-box}/* ease the pain of width management */
+
+      input{display:block;padding:1em;width:100%}
+      .form-group{margin:.2em;}
+      button{padding:2em;margin:.2em;border-radius: 5px;}
+
+      button, a {
+        display:inline-block;border:1px solid blue;text-align:center;
+        padding:1em;
+        color:blue;text-decoration: none;border-radius:5px;
+        padding:.5em .75em;margin:.1em;
+      }
+  body
+    noscript(style="color:red") Javascript is required but is turned off on your device
+    table(cellPadding="0" cellSpacing="0" border="0" style="width:100%;height:100%;")
+      tr
+        td(valign="top" style="padding:0 1em;")
+          div
+            form(target="iframe" action="/timed-mute" style="text-align:center;")
+              table(cellPadding="0" cellSpacing="0" border="0" style="width:100%")
+                tr
+                  td(style="width:50%")
+                    strong wait mins
+                    .form-group
+                      input(type="number" name="wait" id="wait" value="0" maxLength="3")
+                    button(type="button" onclick="document.getElementById('wait').value=0") 0
+                    button(type="button" onclick="document.getElementById('wait').value=9") 9
+                    button(type="button" onclick="document.getElementById('wait').value=15") 15
+                    button(type="button" onclick="document.getElementById('wait').value=30") 30
+
+                  td(style="width:50%")
+                    strong mute mins
+                    .form-group
+                      input(type="number" name="time" id="time" value="9" maxLength="3")
+                    button(type="button" onclick="document.getElementById('time').value=2") 2
+                    button(type="button" onclick="document.getElementById('time').value=4") 4
+                    button(type="button" onclick="document.getElementById('time').value=6") 6
+                    button(type="button" onclick="document.getElementById('time').value=8") 8
+              
+              br
+
+              div(style="display:flex")
+                a(target="iframe" style="flex-grow:1" href="/cancel-timer")
+                  |CANCEL TIMER
+                button(type="submit" target="iframe" style="flex-grow:1")
+                  |TIMED MUTE
+              
+            br
+            br
+
+            form(target="iframe" action="/volume" style="text-align:center;")
+              strong volume
+              div
+                button(type="submit" target="iframe" name="volume" class="number" value="0") 0
+                button(type="submit" target="iframe" name="volume" class="number" value="5") 5
+                button(type="submit" target="iframe" name="volume" class="number" value="10") 10
+                button(type="submit" target="iframe" name="volume" class="number" value="30") 30
+                button(type="submit" target="iframe" name="volume" class="number" value="50") 50
+                button(type="submit" target="iframe" name="volume" class="number" value="70") 70
+                button(type="submit" target="iframe" name="volume" class="number" value="90") 90
+                button(type="submit" target="iframe" name="volume" class="number" value="100") 100
+            //-
+              br
+              br
+              table(cellPadding="0" cellSpacing="0" border="0" style="width:100%")
+                tr
+                  td(style="width:50%")
+                    .form-group
+                      a(href="/mute" target="iframe")
+                        |MUTE
+                  td(style="width:50%")
+                    .form-group
+                      a(href="/unmute" target="iframe")
+                        |UNMUTE
+      tr
+        td(style="height:20px")
+          strong Server Response
+      tr
+        td(style="height:80px;background-color: #CCC;")
+          iframe(name="iframe" width="100%" height="100%" frameBorder="0" style="padding:0;margin:0;")
+            p Your browser does not support iframes.\
