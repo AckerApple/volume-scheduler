@@ -7,7 +7,7 @@ module.exports.run = function(wait, minutes){
   #set runTime to 9
 
   set mins to runTime * 60
-  set threeQuarts to mins - (mins / 5)
+  set fadeUpTime to mins - (mins / 6)
 
   #detect airfoil
   tell application "System Events"
@@ -31,9 +31,9 @@ module.exports.run = function(wait, minutes){
 
   --display dialog "Muted for " & runTime
 
-  delay threeQuarts
+  delay fadeUpTime
 
-  log (mins / 5) & " seconds left"
+  log (mins / 6) & " seconds left"
 
   if airfoilRunning then
     tell application "Airfoil"
@@ -43,7 +43,7 @@ module.exports.run = function(wait, minutes){
     set volume output volume 40
   end if
 
-  delay (mins / 5)
+  delay (mins / 6)
 
   if airfoilRunning then
     tell application "Airfoil"

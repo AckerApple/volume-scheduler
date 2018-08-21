@@ -12,8 +12,9 @@ const mins = [
   600000//10mins
 ]
 
-const hour1 = 3600000
+const sec30 = 30000
 const min30 = 1800000
+const hour1 = 3600000
 
 module.exports.timeSheets = [
   //9
@@ -62,7 +63,7 @@ module.exports.timeSheets = [
 
   //1
   {
-    atTime: hour1*13-mins[2],//12:58pm
+    atTime: hour1*13-mins[1],//12:58pm
     timeLength:mins[8]
   },
   //1:30
@@ -112,8 +113,8 @@ module.exports.timeSheets = [
   },
   //5:30
   {
-    atTime: (hour1*17+min30)-mins[1],//5:29pm
-    timeLength:mins[8]
+    atTime: (hour1*17+min30)-(mins[1]+sec30),//5:28:30pm
+    timeLength:mins[9]
   },
 
   //6
@@ -124,7 +125,7 @@ module.exports.timeSheets = [
   //6:30
   {
     atTime: (hour1*18+min30)-mins[1],//6:29pm
-    timeLength:mins[8]
+    timeLength:mins[9]
   },
   
   //7

@@ -30,7 +30,7 @@ function scheduleTimeSheet(timeSheet){
   const currentTimeMs = (hour1*nowDate.getHours()) + (mins[1]*nowDate.getMinutes())
 
   if( timeSheet.atTime < currentTimeMs ){
-    log.log("skipped",log.dateShortTime(currentDayMs+timeSheet.atTime))
+    //log.log("skipped",log.dateShortTime(currentDayMs+timeSheet.atTime))
     scheduleNext()
     return
   }
