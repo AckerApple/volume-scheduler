@@ -40,7 +40,8 @@ function scheduleTimeSheet(timeSheet){
   setTimeout(()=>{
     log.log("running mute for", timeSheet.timeLength/60/1000,"mins")
     
-    airFoil.run(0, runMins).then(()=>scheduleNext()).catch(()=>scheduleNext())
+    airFoil.run(0, runMins)
+    scheduleNext()
   }, diff)
 
   log.log(
