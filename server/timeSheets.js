@@ -9,7 +9,12 @@ const mins = [
   420000,
   480000,//8mins
   540000,
-  600000//10mins
+  600000,//10mins
+  660000,
+  720000,
+  780000,//13mins
+  840000,
+  900000//15mins
 ]
 
 const sec30 = 30000
@@ -24,36 +29,41 @@ module.exports.timeSheets = [
   },
   //9:30
   {
-    atTime: (hour1*9+min30)-mins[2],//9:28am
+    atTime: (hour1*9+min30)-mins[1],//9:28am
+    timeLength:mins[8]
+  },
+  //9:48
+  {
+    atTime: (hour1*9+min30+mins[15]+mins[3]),//9:48am
     timeLength:mins[8]
   },
 
   //10
   {
-    atTime: hour1*10-mins[2],//9:58am
+    atTime: hour1*10+mins[2]+min30,//10:02:30am
     timeLength:mins[10]
   },
   //10:30
   {
-    atTime: (hour1*10+min30)-mins[2],//10:28am
-    timeLength:mins[9]
+    atTime: (hour1*10+min30),//10:30am
+    timeLength:mins[8]
   },
   
   //11
   {
-    atTime: hour1*11-mins[2],//10:58am
-    timeLength:mins[8]
+    atTime: hour1*11,//11:00am
+    timeLength:mins[9]
   },
   //11:30
   {
-    atTime: (hour1*11+min30)-mins[2],//11:28am
+    atTime: (hour1*11+min30)-mins[1],//11:28am
     timeLength:mins[8]
   },
 
   //12
   {
     atTime: hour1*12-mins[2],//11:58am
-    timeLength:mins[8]
+    timeLength:mins[9]
   },
   //12:30
   {
@@ -68,7 +78,7 @@ module.exports.timeSheets = [
   },
   //1:30
   {
-    atTime: (hour1*13+min30),//1:30pm
+    atTime: (hour1*13+min30)-sec30,//1:29:30pm
     timeLength:mins[8]
   },
 
@@ -80,7 +90,7 @@ module.exports.timeSheets = [
   //2:30
   {
     atTime: (hour1*14+min30)-mins[1],//2:29pm
-    timeLength:mins[8]
+    timeLength:mins[8]+sec30
   },
 
   //3
@@ -97,12 +107,12 @@ module.exports.timeSheets = [
 
   //4
   {
-    atTime: hour1*16,//4pm
+    atTime: hour1*16-sec30,//3:59:30pm
     timeLength:mins[8]
   },
   //4:30
   {
-    atTime: (hour1*16+min30)-mins[2],//4:28pm
+    atTime: (hour1*16+min30)-sec30,//4:29:30pm
     timeLength:mins[8]
   },
 
@@ -113,18 +123,18 @@ module.exports.timeSheets = [
   },
   //5:30
   {
-    atTime: (hour1*17+min30)-(mins[1]+sec30),//5:28:30pm
+    atTime: (hour1*17+min30)-sec30,//5:29:30pm
     timeLength:mins[9]
   },
 
   //6
   {
-    atTime: hour1*18-mins[2],//5:58pm
+    atTime: hour1*18-sec30,//5:59:30pm
     timeLength:mins[8]
   },
   //6:30
   {
-    atTime: (hour1*18+min30)-mins[1],//6:29pm
+    atTime: (hour1*18+min30)-mins[1]-sec30,//6:28:30pm
     timeLength:mins[9]
   },
   

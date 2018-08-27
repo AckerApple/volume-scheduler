@@ -20,7 +20,14 @@ const hour1 = 3600000
 let tsIndex = 0
 
 function scheduleNext(){
-  tsIndex = tsIndex===timeSheets.length-1 ? 0 : tsIndex+1
+  const startOver = tsIndex===timeSheets.length-1
+  
+  if( startOver ){
+    log.log("Shows over")
+    process.exit()
+  }
+
+  tsIndex = startOver ? 0 : tsIndex+1
   scheduleTimeSheet( timeSheets[tsIndex] )
 }
 
