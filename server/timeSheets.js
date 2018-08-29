@@ -40,7 +40,7 @@ module.exports.timeSheets = [
 
   //10
   {
-    atTime: hour1*10+mins[2]+min30,//10:02:30am
+    atTime: hour1*10-mins[1],//09:59am
     timeLength:mins[10]
   },
   //10:30
@@ -56,7 +56,7 @@ module.exports.timeSheets = [
   },
   //11:30
   {
-    atTime: (hour1*11+min30)-mins[1],//11:28am
+    atTime: (hour1*11+min30)-sec30,//11:29:30am
     timeLength:mins[8]
   },
 

@@ -21,10 +21,10 @@ module.exports.run = function(wait, minutes){
 
   if airfoilRunning then
     tell application "Airfoil"
-      set (volume of every speaker) to 0.02
+      set (volume of every speaker) to 0
     end tell
   else
-    set volume output volume 2
+    set volume output volume 0
   end if
 
   log "Muting for " & runTime & " minutes"

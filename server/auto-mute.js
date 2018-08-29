@@ -60,4 +60,4 @@ function scheduleTimeSheet(timeSheet){
   )
 }
 
-scheduleNext()
+scheduleTimeSheet( timeSheets[0] )
