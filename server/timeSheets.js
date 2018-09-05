@@ -22,9 +22,14 @@ const min30 = 1800000
 const hour1 = 3600000
 
 module.exports.timeSheets = [
+  //8:47
+  {
+    atTime: hour1*9-mins[13],//9:47am
+    timeLength:mins[8]
+  },
   //9
   {
-    atTime: hour1*9-mins[2],//8:58am
+    atTime: hour1*9+mins[1],//9:01am
     timeLength:mins[8]
   },
   //9:30

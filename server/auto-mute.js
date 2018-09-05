@@ -24,6 +24,7 @@ function scheduleNext(){
   
   if( startOver ){
     log.log("Shows over")
+    airFoil.volume(50)
     process.exit()
   }
 
