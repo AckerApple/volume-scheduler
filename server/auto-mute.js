@@ -24,8 +24,9 @@ function scheduleNext(){
   
   if( startOver ){
     log.log("Shows over")
-    airFoil.volume(50)
-    process.exit()
+    airFoil.volume(30 * .01)
+    setTimeout(()=>process.exit(), 3000)
+    return
   }
 
   tsIndex = startOver ? 0 : tsIndex+1
@@ -45,6 +46,14 @@ function scheduleTimeSheet(timeSheet){
 
   const diff = timeSheet.atTime - currentTimeMs
   const runMins = timeSheet.timeLength/60/1000
+
+  //seconds before, half mute
+  setTimeout(()=>{
+    log.log("preparing to mute")
+    
+    airFoil.volume(40 * .01)
+  }, diff - 15000)
+
   setTimeout(()=>{
     log.log("running mute for", timeSheet.timeLength/60/1000,"mins")
     

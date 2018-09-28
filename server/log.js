@@ -9,13 +9,13 @@ module.exports.log = log
 
 function getShortTime(){
   const date = new Date()
-  return date.getHours()+":"+date.getMinutes()
+  return date.getHours()+":"+date.getMinutes() + ":" + ("0" + date.getSeconds()).slice(-2)
 }
 module.exports.getShortTime = getShortTime
 
 function dateShortTime( d ){
   const date = new Date(d)
-  return ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2)
+  return ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2)
 }
 module.exports.dateShortTime = dateShortTime
 
