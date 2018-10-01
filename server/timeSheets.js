@@ -135,7 +135,7 @@ module.exports.timeSheets = [
   //6
   {
     atTime: hour1*18-sec30,//5:59:30pm
-    timeLength:mins[8]+sec30
+    timeLength:mins[8]+mins[1]// 10/1/18
   },
   //6:30
   {
