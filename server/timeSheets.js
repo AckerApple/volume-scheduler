@@ -95,19 +95,19 @@ module.exports.timeSheets = [
   //2:30
   {
     atTime: (hour1*14+min30)-mins[1]-sec30,//2:28:30pm
-    timeLength:mins[8]+sec30
+    timeLength:mins[8]+mins[1]// 10/3/18
   },
 
   //3
   {
     atTime: hour1*15-mins[2]-sec30,//2:57:30pm - 9/28/18
-    timeLength:mins[8]+sec30
+    timeLength:mins[8]+mins[1]// 10/2/18
   },
 
   //3:30
   {
-    atTime: (hour1*15+min30)-mins[1],//3:29pm
-    timeLength:mins[9]
+    atTime: (hour1*15+min30)-sec30,//3:29:30pm - 10/2/18
+    timeLength:mins[10]// 10/2/18
   },
 
   //4
