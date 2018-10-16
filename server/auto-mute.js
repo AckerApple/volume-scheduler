@@ -52,14 +52,15 @@ function scheduleTimeSheet(timeSheet){
     log.log("preparing to mute")
     
     airFoil.volume(40 * .01)
-  }, diff - 15000)
+  }, diff - 30000)
 
   setTimeout(()=>{
-    log.log("running mute for", timeSheet.timeLength/60/1000,"mins")
+    log.log("going mute soon")
     
-    airFoil.run(0, runMins)
-    scheduleNext()
-  }, diff)
+    airFoil.volume(20 * .01)
+  }, diff - 15000)
+
+  setTimeout(()=>muteTimeSheet(timeSheet), diff)
 
   log.log(
     "mute in", diff/60/1000,"mins",
@@ -68,6 +69,26 @@ function scheduleTimeSheet(timeSheet){
     "for",
     timeSheet.timeLength/60/1000,"mins"
   )
+}
+
+function muteTimeSheet( timeSheet ){
+  log.log("running mute for", timeSheet.timeLength/60/1000,"mins")
+  
+  airFoil.volume(0)//mute
+  
+  //start restore volumn
+  setTimeout(()=>{
+    airFoil.volume(10 * .01)
+  }, timeSheet.timeLength-40000)
+  setTimeout(()=>{
+    airFoil.volume(40 * .01)
+  }, timeSheet.timeLength-20000)
+
+  //restore volumn
+  setTimeout(()=>{
+    airFoil.volume(1)
+    scheduleNext()
+  }, timeSheet.timeLength)
 }
 
 scheduleTimeSheet( timeSheets[0] )
