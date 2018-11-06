@@ -4,7 +4,7 @@ const path = require('path')
 const index = require('fs').readFileSync(path.join(__dirname,"app","index.html")).toString()
 var url = require('url');
 
-require("./auto-mute.js")
+const autoConfig = require("./auto-mute.js")
 
 //log(require('os').hostname())
 
@@ -27,6 +27,11 @@ require('http').createServer((req,res)=>{
     const wait = isNaN(query.wait) ? 0 : Number(query.wait)
     airFoil.run(wait, time)
     return res.end("running timed mute")
+  }
+
+  if( urlPath==='/nap' ){
+    toggleNap()
+    return res.end(autoConfig.paused ? "napping" : "awake")
   }
 
   if( urlPath==='/cancel-timer' ){
@@ -57,3 +62,20 @@ require('http').createServer((req,res)=>{
   res.end("404")
 })
 .listen(8080,()=>log('server started'))
+
+function toggleNap(){
+  const paused = autoConfig.paused
+  autoConfig.paused = !paused//toggle
+
+  if( autoConfig.paused ){
+    if( !autoConfig.inBreak ){
+      airFoil.volume(25 * .01)
+    }
+
+    setTimeout(()=>
+      airFoil.volume(0)
+    , 30000)
+  }else if( !autoConfig.inBreak ){
+     airFoil.volume(1)
+  }
+}

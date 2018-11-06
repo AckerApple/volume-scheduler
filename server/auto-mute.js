@@ -2,6 +2,12 @@ const log = require('./log')
 const airFoil = require('../index')
 const timeSheets = require('./timeSheets').timeSheets
 
+
+const config = module.exports.config = {
+  paused:false,
+  inBreak:false
+}
+
 const mins = [
   0,
   60000,
@@ -19,12 +25,18 @@ const mins = [
 const hour1 = 3600000
 let tsIndex = 0
 
+function changeVolume( num ){
+  if( !config.paused )return//do not change volume
+
+  airFoil.volume( num )
+}
+
 function scheduleNext(){
   const startOver = tsIndex===timeSheets.length-1
   
   if( startOver ){
     log.log("Shows over")
-    airFoil.volume(30 * .01)
+    changeVolume(30 * .01)
     setTimeout(()=>process.exit(), 3000)
     return
   }
@@ -40,6 +52,14 @@ function scheduleTimeSheet(timeSheet){
 
   if( timeSheet.atTime < currentTimeMs ){
     //log.log("skipped",log.dateShortTime(currentDayMs+timeSheet.atTime))
+    if( timeSheet.atTime+timeSheet.timeLength > currentTimeMs ){
+      config.inBreak = true
+      const inMuteFor = timeSheet.atTime+timeSheet.timeLength - currentTimeMs
+      log.log('already in mute for', inMuteFor)
+      muteForAndSchedule( inMuteFor )
+      return
+    }
+
     scheduleNext()
     return
   }
@@ -48,20 +68,12 @@ function scheduleTimeSheet(timeSheet){
   const runMins = timeSheet.timeLength/60/1000
 
   //seconds before, half mute
-  setTimeout(()=>{
-    log.log("preparing to mute")
-    
-    airFoil.volume(40 * .01)
-  }, diff - 30000)
-
-  setTimeout(()=>{
-    log.log("going mute soon")
-    
-    airFoil.volume(20 * .01)
-  }, diff - 15000)
+  preMuteAt( diff )
 
   setTimeout(()=>muteTimeSheet(timeSheet), diff)
 
+  config.inBreak = false
+  changeVolume(1)
   log.log(
     "mute in", diff/60/1000,"mins",
     "at",
@@ -74,21 +86,41 @@ function scheduleTimeSheet(timeSheet){
 function muteTimeSheet( timeSheet ){
   log.log("running mute for", timeSheet.timeLength/60/1000,"mins")
   
-  airFoil.volume(0)//mute
+  muteForAndSchedule( timeSheet.timeLength )
+}
+
+function muteForAndSchedule( time ){
+  changeVolume(0)//mute
   
   //start restore volumn
   setTimeout(()=>{
-    airFoil.volume(10 * .01)
-  }, timeSheet.timeLength-40000)
+    changeVolume(10 * .01)
+  }, time-40000)
   setTimeout(()=>{
-    airFoil.volume(40 * .01)
-  }, timeSheet.timeLength-20000)
+    changeVolume(40 * .01)
+  }, time-20000)
 
   //restore volumn
   setTimeout(()=>{
-    airFoil.volume(1)
+    config.inBreak = false
+    changeVolume(1)
     scheduleNext()
-  }, timeSheet.timeLength)
+  }, time)
+}
+
+function preMuteAt( time ){
+  config.inBreak = true
+  setTimeout(()=>{
+    log.log("preparing to mute")
+    
+    changeVolume(40 * .01)
+  }, time - 30000)
+
+  setTimeout(()=>{
+    log.log("going mute soon")
+    
+    changeVolume(20 * .01)
+  }, time - 15000)
 }
 
 scheduleTimeSheet( timeSheets[0] )
