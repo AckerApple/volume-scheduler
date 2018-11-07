@@ -2,8 +2,9 @@ const log = require('./log').log
 const airFoil = require('../index')
 const path = require('path')
 const index = require('fs').readFileSync(path.join(__dirname,"app","index.html")).toString()
-var url = require('url');
+var url = require('url')
 
+let lastTime = 0
 const autoConfig = require("./auto-mute.js")
 
 //log(require('os').hostname())
@@ -23,10 +24,17 @@ require('http').createServer((req,res)=>{
   }
 
   if( urlPath==='/timed-mute' ){
-    const time = isNaN(query.time) ? 9 : Number(query.time)
-    const wait = isNaN(query.wait) ? 0 : Number(query.wait)
-    airFoil.run(wait, time)
-    return res.end("running timed mute")
+    const time = (isNaN(query.time) ? 9 : Number(query.time)) * 1000 * 60
+    const wait = (isNaN(query.wait) ? 0 : Number(query.wait)) * 1000 * 60
+
+    if( lastTime ){
+      log("Last timeout cancelled")
+      clearTimeout( lastTime )
+    }
+
+    doTimeMute(wait, time)
+        
+    return res.end(`running timed mute in ${wait}ms for ${time}ms`)
   }
 
   if( urlPath==='/nap' ){
@@ -43,17 +51,32 @@ require('http').createServer((req,res)=>{
     if( isNaN(query.volume) ){
       return res.end("invalid volume")
     }
+
+    if( lastTime ){
+      log("Last timeout cancelled")
+      clearTimeout( lastTime )
+    }
+
     const volume = Number(query.volume) * .01
     airFoil.volume(volume)
+
     return res.end("volume "+volume)
   }
 
   if( urlPath==='/unmute' ){
+    if( lastTime ){
+      log("Last timeout cancelled")
+      clearTimeout( lastTime )
+    }
     airFoil.volume(1)
     return res.end("unmute")
   }
 
   if( urlPath==='/mute' ){
+    if( lastTime ){
+      log("Last timeout cancelled")
+      clearTimeout( lastTime )
+    }
     airFoil.volume(0)
     return res.end("mute")
   }
@@ -63,18 +86,50 @@ require('http').createServer((req,res)=>{
 })
 .listen(8080,()=>log('server started'))
 
+function doTimeMute(wait, time){
+  function goFullVol(){
+    if( autoConfig.inBreak ){
+      log("not restoring volume, in break")
+      return//do not restore volume
+    }
+    airFoil.volume(1)
+    lastTime = 0
+  }
+
+  function beforeFullVol(){
+    if( autoConfig.inBreak ){
+      log("not partially restoring volume, in break")
+    }else{
+      airFoil.volume(25*.01)
+    }
+    
+    lastTime = setTimeout(goFullVol, time-midUp)
+  }
+
+  function afterWait(){
+    airFoil.volume(0)
+
+    const midUp = time-time/7
+
+    //start to turn volumn up
+    lastTime = setTimeout(beforeFullVol, midUp)
+  }
+
+  lastTime = setTimeout(afterWait, wait)
+}
+
 function toggleNap(){
   const paused = autoConfig.paused
   autoConfig.paused = !paused//toggle
 
   if( autoConfig.paused ){
     if( !autoConfig.inBreak ){
-      airFoil.volume(25 * .01)
+      airFoil.volume(30 * .01)
     }
 
     setTimeout(()=>
       airFoil.volume(0)
-    , 30000)
+    , 60000)
   }else if( !autoConfig.inBreak ){
      airFoil.volume(1)
   }

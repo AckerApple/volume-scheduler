@@ -26,7 +26,7 @@ const hour1 = 3600000
 let tsIndex = 0
 
 function changeVolume( num ){
-  if( !config.paused )return//do not change volume
+  if( config.paused )return//do not change volume
 
   airFoil.volume( num )
 }
