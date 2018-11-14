@@ -27,10 +27,7 @@ require('http').createServer((req,res)=>{
     const time = (isNaN(query.time) ? 9 : Number(query.time)) * 1000 * 60
     const wait = (isNaN(query.wait) ? 0 : Number(query.wait)) * 1000 * 60
 
-    if( lastTime ){
-      log("Last timeout cancelled")
-      clearTimeout( lastTime )
-    }
+    checkLastTime()
 
     doTimeMute(wait, time)
         
@@ -52,10 +49,7 @@ require('http').createServer((req,res)=>{
       return res.end("invalid volume")
     }
 
-    if( lastTime ){
-      log("Last timeout cancelled")
-      clearTimeout( lastTime )
-    }
+    checkLastTime()
 
     const volume = Number(query.volume) * .01
     airFoil.volume(volume)
@@ -64,19 +58,13 @@ require('http').createServer((req,res)=>{
   }
 
   if( urlPath==='/unmute' ){
-    if( lastTime ){
-      log("Last timeout cancelled")
-      clearTimeout( lastTime )
-    }
+    checkLastTime()
     airFoil.volume(1)
     return res.end("unmute")
   }
 
   if( urlPath==='/mute' ){
-    if( lastTime ){
-      log("Last timeout cancelled")
-      clearTimeout( lastTime )
-    }
+    checkLastTime()
     airFoil.volume(0)
     return res.end("mute")
   }
@@ -85,6 +73,13 @@ require('http').createServer((req,res)=>{
   res.end("404")
 })
 .listen(8080,()=>log('server started'))
+
+function checkLastTime(){
+  if( lastTime ){
+    log("Last timeout cancelled")
+    clearTimeout( lastTime )
+  }
+}
 
 function doTimeMute(wait, time){
   function goFullVol(){
@@ -124,12 +119,26 @@ function toggleNap(){
 
   if( autoConfig.paused ){
     if( !autoConfig.inBreak ){
-      airFoil.volume(30 * .01)
+      airFoil.volume(50 * .01)//soft mute start
+      
+      lastTime = setTimeout(()=>{
+        airFoil.volume(40 * .01)
+        lastTime = setTimeout(()=>{
+          airFoil.volume(30 * .01)
+          lastTime = setTimeout(()=>{
+            airFoil.volume(20 * .01)
+            lastTime = setTimeout(()=>{
+              airFoil.volume(10 * .01)
+              lastTime = setTimeout(()=>{
+                airFoil.volume(0)
+              }, 20000)
+            }, 20000)
+          }, 20000)
+        }, 20000)
+      }, 20000)
     }
 
-    setTimeout(()=>
-      airFoil.volume(0)
-    , 60000)
+    
   }else if( !autoConfig.inBreak ){
      airFoil.volume(1)
   }
