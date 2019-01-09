@@ -26,7 +26,10 @@ const hour1 = 3600000
 let tsIndex = 0
 
 function changeVolume( num ){
-  if( config.paused )return//do not change volume
+  if( config.paused ){
+    log.log("schedule paused. Skipped "+num+" volume")
+    return//do not change volume
+  }
 
   airFoil.volume( num )
 }
@@ -35,9 +38,9 @@ function scheduleNext(){
   const startOver = tsIndex===timeSheets.length-1
   
   if( startOver ){
-    log.log("Shows over")
+    log.log("------- Shows over")
     changeVolume(30 * .01)
-    setTimeout(()=>process.exit(), 3000)
+    setTimeout(()=>process.exit(), 30000)
     return
   }
 

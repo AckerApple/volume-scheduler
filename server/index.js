@@ -5,7 +5,7 @@ const index = require('fs').readFileSync(path.join(__dirname,"app","index.html")
 var url = require('url')
 
 let lastTime = 0
-const autoConfig = require("./auto-mute.js")
+const autoConfig = require("./auto-mute.js").config
 
 //log(require('os').hostname())
 
@@ -38,6 +38,11 @@ require('http').createServer((req,res)=>{
     toggleNap()
     return res.end(autoConfig.paused ? "napping" : "awake")
   }
+  
+  if( urlPath==='/schedule-pause-toggle' ){
+    autoConfig.paused = !autoConfig.paused
+    return res.end(autoConfig.paused ? "paused" : "unpaused")
+  }
 
   if( urlPath==='/cancel-timer' ){
     airFoil.cancel()
@@ -69,6 +74,10 @@ require('http').createServer((req,res)=>{
     return res.end("mute")
   }
 
+  if( urlPath==='/config' ){
+    return res.end( JSON.stringify(autoConfig) )
+  }
+
   res.writeHead(404, {"Content-Type": "text/html"})
   res.end("404")
 })
@@ -91,6 +100,8 @@ function doTimeMute(wait, time){
     lastTime = 0
   }
 
+  const midUp = time-time/7
+
   function beforeFullVol(){
     if( autoConfig.inBreak ){
       log("not partially restoring volume, in break")
@@ -104,7 +115,6 @@ function doTimeMute(wait, time){
   function afterWait(){
     airFoil.volume(0)
 
-    const midUp = time-time/7
 
     //start to turn volumn up
     lastTime = setTimeout(beforeFullVol, midUp)

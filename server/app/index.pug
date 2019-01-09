@@ -64,10 +64,13 @@ html(lang="en")
               div(style="display:flex")
                 a(target="iframe" style="flex-grow:1" href="/cancel-timer")
                   |CANCEL TIMER
-                a(target="iframe" style="flex-grow:1" href="/nap")
-                  |NAP
                 button(type="submit" target="iframe" style="flex-grow:1")
                   |TIMED MUTE
+              div(style="display:flex")
+                a(target="iframe" style="flex-grow:1" href="/nap")
+                  |NAP
+                a(target="iframe" style="flex-grow:1" href="/schedule-pause-toggle")
+                  |PAUSE SCHEDULE
               
             br
             br
@@ -98,6 +101,7 @@ html(lang="en")
                         |UNMUTE
       tr
         td(style="height:20px")
+          a(style="float:right" href="/config" target="iframe") config
           strong Server Response
       tr
         td(style="height:80px;background-color: #CCC;")

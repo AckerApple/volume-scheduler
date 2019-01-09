@@ -64,13 +64,13 @@ module.exports.timeSheets = [
   //11:30
   {
     atTime: hour1*11+min30-mins[1],//11:29:00am - changed 11/8/18
-    timeLength:mins[10]//11-01-18
+    timeLength:mins[11]//11-15-18
   },
 
   //12
   {
     atTime: hour1*12-mins[2],//11:58am
-    timeLength:mins[10]// 11-01-18
+    timeLength:mins[11]// 11-28-18
   },
   //12:30
   {
@@ -97,7 +97,7 @@ module.exports.timeSheets = [
   //2:30
   {
     atTime: hour1*14+min30-mins[1]-sec30,//2:28:30pm
-    timeLength:mins[8]+mins[1]// 10/3/18
+    timeLength:mins[10]// 11/18/18
   },
 
   //3
@@ -125,19 +125,19 @@ module.exports.timeSheets = [
 
   //5
   {
-    atTime: hour1*17-mins[2],//4:58pm changed 10-30-18
-    timeLength:mins[10]//10-18-18
+    atTime: hour1*17-mins[2]-sec30,//4:57:30pm changed 12-11-18
+    timeLength:mins[11]//11-14-18
   },
   //5:30
   {
-    atTime: hour1*17+min30-sec30,//5:29:30pm
-    timeLength:mins[9]
+    atTime: hour1*17+min30-sec30,//5:28:30pm changed 12-11-18
+    timeLength:mins[11]
   },
 
   //6
   {
     atTime: hour1*18-mins[1],//5:58pm
-    timeLength:mins[9]// 10/30/18
+    timeLength:mins[10]// 11/15/18
   },
   //6:30
   {
