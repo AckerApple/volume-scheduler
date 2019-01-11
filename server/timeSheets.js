@@ -25,7 +25,7 @@ const hour1 = 3600000
 module.exports.timeSheets = [
   //8:47
   {
-    atTime: hour1*9-mins[13],//9:47am
+    atTime: (hour1*9)-mins[13],//9:47am
     timeLength:mins[8]
   },
   //9
@@ -35,7 +35,7 @@ module.exports.timeSheets = [
   },
   //9:30
   {
-    atTime: hour1*9+min30-mins[1],//9:28am
+    atTime: (hour1*9+min30)-mins[1],//9:28am
     timeLength:mins[8]
   },
   //9:48
@@ -52,7 +52,7 @@ module.exports.timeSheets = [
   },
   //10:30
   {
-    atTime: hour1*10+min30-sec30,//10:29:30am
+    atTime: (hour1*10+min30)-mins[1],//10:29:00am - changed 1/10/19
     timeLength:mins[8]
   },
   
@@ -63,7 +63,7 @@ module.exports.timeSheets = [
   },
   //11:30
   {
-    atTime: hour1*11+min30-mins[1],//11:29:00am - changed 11/8/18
+    atTime: (hour1*11+min30)-(mins[1]+sec30),//11:29:00am - changed 11/8/18
     timeLength:mins[11]//11-15-18
   },
 
@@ -74,63 +74,63 @@ module.exports.timeSheets = [
   },
   //12:30
   {
-    atTime: hour1*12+min30-mins[2],//12:29:00am - 10-9-18
+    atTime: (hour1*12+min30)-mins[2],//12:29:00am - 10-9-18
     timeLength:mins[12]// 10-24-18
   },
 
   //1
   {
-    atTime: hour1*13-mins[1],//12:58pm
+    atTime: (hour1*13)-mins[1],//12:58pm
     timeLength:mins[11]+sec30//11-02-18
   },
   //1:30
   {
-    atTime: (hour1*13+min30)-mins[1],//1:29:00pm - changed 11/7/18
+    atTime: (hour1*13+min30)-(mins[1]+sec30),//1:28:30pm - changed 1/10/19
     timeLength:mins[10]+sec30//changed 11/7/18
   },
 
   //2
   {
-    atTime: hour1*14-mins[3],//1:57pm
+    atTime: (hour1*14)-mins[3],//1:57pm
     timeLength:mins[10]+sec30
   },
   //2:30
   {
-    atTime: hour1*14+min30-mins[1]-sec30,//2:28:30pm
+    atTime: (hour1*14+min30)-(mins[1]+sec30),//2:28:30pm
     timeLength:mins[10]// 11/18/18
   },
 
   //3
   {
-    atTime: hour1*15-mins[2]-sec30,//2:57:30pm - 9/28/18
+    atTime: (hour1*15)-(mins[2]+sec30),//2:57:30pm - 9/28/18
     timeLength:mins[11]// 10/31/18
   },
 
   //3:30
   {
-    atTime: hour1*15+min30-mins[1],//3:28:30pm - 11/6/18
+    atTime: (hour1*15+min30)-mins[1],//3:28:30pm - 11/6/18
     timeLength:mins[10]// 11/6/18
   },
 
   //4
   {
-    atTime: hour1*16-mins[1]-sec30,//3:58:30pm changed 10/25/18
+    atTime: (hour1*16)-(mins[1]+sec30),//3:58:30pm changed 10/25/18
     timeLength:mins[10]// 10-30-18
   },
   //4:30
   {
-    atTime: hour1*16+min30-mins[2],//4:28:00pm changed 10-25-2018
+    atTime: (hour1*16+min30)-mins[2],//4:28:00pm changed 10-25-2018
     timeLength:mins[9]
   },
 
   //5
   {
-    atTime: hour1*17-mins[2]-sec30,//4:57:30pm changed 12-11-18
+    atTime: (hour1*17)-(mins[2]+sec30),//4:57:30pm changed 12-11-18
     timeLength:mins[11]//11-14-18
   },
   //5:30
   {
-    atTime: hour1*17+min30-sec30,//5:28:30pm changed 12-11-18
+    atTime: (hour1*17+min30)-mins[2],//5:28:00pm changed 1-10-19
     timeLength:mins[11]
   },
 
@@ -141,13 +141,13 @@ module.exports.timeSheets = [
   },
   //6:30
   {
-    atTime: hour1*18+min30-mins[1],//6:28:30pm - 11/7/18
+    atTime: (hour1*18+min30)-mins[1],//6:28:30pm - 11/7/18
     timeLength:mins[10]//changed 11/7/18
   },
   
   //7
   {
-    atTime: hour1*19-mins[5]-sec30,//6:55pm
+    atTime: (hour1*19)-(mins[5]+sec30),//6:54:30pm
     timeLength:mins[9]
   }
 ]
