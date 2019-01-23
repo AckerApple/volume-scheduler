@@ -1,5 +1,5 @@
 const log = require('./log').log
-const airFoil = require('../index')
+const apple = require('../index')
 const path = require('path')
 const index = require('fs').readFileSync(path.join(__dirname,"app","index.html")).toString()
 var url = require('url')
@@ -8,6 +8,9 @@ let lastTime = 0
 const autoConfig = require("./auto-mute.js").config
 
 //log(require('os').hostname())
+
+apple.open("iHeartRadio")
+apple.open("Airfoil")
 
 require('http').createServer((req,res)=>{
   const parts = req.url.split('?')
@@ -45,7 +48,7 @@ require('http').createServer((req,res)=>{
   }
 
   if( urlPath==='/cancel-timer' ){
-    airFoil.cancel()
+    apple.cancel()
     return res.end("cancelled timer")
   }
 
@@ -57,20 +60,20 @@ require('http').createServer((req,res)=>{
     checkLastTime()
 
     const volume = Number(query.volume) * .01
-    airFoil.volume(volume)
+    apple.volume(volume)
 
     return res.end("volume "+volume)
   }
 
   if( urlPath==='/unmute' ){
     checkLastTime()
-    airFoil.volume(1)
+    apple.volume(1)
     return res.end("unmute")
   }
 
   if( urlPath==='/mute' ){
     checkLastTime()
-    airFoil.volume(0)
+    apple.volume(0)
     return res.end("mute")
   }
 
@@ -96,7 +99,7 @@ function doTimeMute(wait, time){
       log("not restoring volume, in break")
       return//do not restore volume
     }
-    airFoil.volume(1)
+    apple.volume(1)
     lastTime = 0
   }
 
@@ -106,14 +109,14 @@ function doTimeMute(wait, time){
     if( autoConfig.inBreak ){
       log("not partially restoring volume, in break")
     }else{
-      airFoil.volume(25*.01)
+      apple.volume(25*.01)
     }
     
     lastTime = setTimeout(goFullVol, time-midUp)
   }
 
   function afterWait(){
-    airFoil.volume(0)
+    apple.volume(0)
 
 
     //start to turn volumn up
@@ -129,27 +132,27 @@ function toggleNap(){
 
   if( autoConfig.paused ){
     if( !autoConfig.inBreak ){
-      airFoil.volume(50 * .01)//soft mute start
+      apple.volume(40 * .01)//soft mute start
       
       lastTime = setTimeout(()=>{
-        airFoil.volume(40 * .01)
+        apple.volume(30 * .01)
         lastTime = setTimeout(()=>{
-          airFoil.volume(30 * .01)
+          apple.volume(20 * .01)
           lastTime = setTimeout(()=>{
-            airFoil.volume(20 * .01)
+            apple.volume(15 * .01)
             lastTime = setTimeout(()=>{
-              airFoil.volume(10 * .01)
+              apple.volume(5 * .01)
               lastTime = setTimeout(()=>{
-                airFoil.volume(0)
-              }, 20000)
-            }, 20000)
-          }, 20000)
-        }, 20000)
-      }, 20000)
+                apple.volume(0)
+              }, 40000)
+            }, 40000)
+          }, 40000)
+        }, 40000)
+      }, 40000)
     }
 
     
   }else if( !autoConfig.inBreak ){
-     airFoil.volume(1)
+     apple.volume(1)
   }
 }
