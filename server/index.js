@@ -1,6 +1,7 @@
 const log = require('./log').log
 const apple = require('../index')
 const path = require('path')
+const http = require('http')
 const index = require('fs').readFileSync(path.join(__dirname,"app","index.html")).toString()
 var url = require('url')
 
@@ -10,81 +11,84 @@ const autoConfig = require("./auto-mute.js").config
 //log(require('os').hostname())
 
 apple.open("iHeartRadio")
-apple.open("Airfoil")
+.then(()=>apple.open("Airfoil"))
+.then(()=>createServer())
 
-require('http').createServer((req,res)=>{
-  const parts = req.url.split('?')
-  const urlPath = parts.shift()
+function createServer(){
+  return http.createServer((req,res)=>{
+    const parts = req.url.split('?')
+    const urlPath = parts.shift()
 
-  var url_parts = url.parse(req.url, true);
-  var query = url_parts.query
-  
-  log(urlPath,query)
+    var url_parts = url.parse(req.url, true);
+    var query = url_parts.query
+    
+    log(urlPath,query)
 
-  if( urlPath==='/' ){
-    res.writeHead(200, {"Content-Type": "text/html"})
-    return res.end(index)
-  }
-
-  if( urlPath==='/timed-mute' ){
-    const time = (isNaN(query.time) ? 9 : Number(query.time)) * 1000 * 60
-    const wait = (isNaN(query.wait) ? 0 : Number(query.wait)) * 1000 * 60
-
-    checkLastTime()
-
-    doTimeMute(wait, time)
-        
-    return res.end(`running timed mute in ${wait}ms for ${time}ms`)
-  }
-
-  if( urlPath==='/nap' ){
-    toggleNap()
-    return res.end(autoConfig.paused ? "napping" : "awake")
-  }
-  
-  if( urlPath==='/schedule-pause-toggle' ){
-    autoConfig.paused = !autoConfig.paused
-    return res.end(autoConfig.paused ? "paused" : "unpaused")
-  }
-
-  if( urlPath==='/cancel-timer' ){
-    apple.cancel()
-    return res.end("cancelled timer")
-  }
-
-  if( urlPath==='/volume' ){
-    if( isNaN(query.volume) ){
-      return res.end("invalid volume")
+    if( urlPath==='/' ){
+      res.writeHead(200, {"Content-Type": "text/html"})
+      return res.end(index)
     }
 
-    checkLastTime()
+    if( urlPath==='/timed-mute' ){
+      const time = (isNaN(query.time) ? 9 : Number(query.time)) * 1000 * 60
+      const wait = (isNaN(query.wait) ? 0 : Number(query.wait)) * 1000 * 60
 
-    const volume = Number(query.volume) * .01
-    apple.volume(volume)
+      checkLastTime()
 
-    return res.end("volume "+volume)
-  }
+      doTimeMute(wait, time)
+          
+      return res.end(`running timed mute in ${wait}ms for ${time}ms`)
+    }
 
-  if( urlPath==='/unmute' ){
-    checkLastTime()
-    apple.volume(1)
-    return res.end("unmute")
-  }
+    if( urlPath==='/nap' ){
+      toggleNap()
+      return res.end(autoConfig.paused ? "napping" : "awake")
+    }
+    
+    if( urlPath==='/schedule-pause-toggle' ){
+      autoConfig.paused = !autoConfig.paused
+      return res.end(autoConfig.paused ? "paused" : "unpaused")
+    }
 
-  if( urlPath==='/mute' ){
-    checkLastTime()
-    apple.volume(0)
-    return res.end("mute")
-  }
+    if( urlPath==='/cancel-timer' ){
+      apple.cancel()
+      return res.end("cancelled timer")
+    }
 
-  if( urlPath==='/config' ){
-    return res.end( JSON.stringify(autoConfig) )
-  }
+    if( urlPath==='/volume' ){
+      if( isNaN(query.volume) ){
+        return res.end("invalid volume")
+      }
 
-  res.writeHead(404, {"Content-Type": "text/html"})
-  res.end("404")
-})
-.listen(8080,()=>log('server started'))
+      checkLastTime()
+
+      const volume = Number(query.volume) * .01
+      apple.volume(volume)
+
+      return res.end("volume "+volume)
+    }
+
+    if( urlPath==='/unmute' ){
+      checkLastTime()
+      apple.volume(1)
+      return res.end("unmute")
+    }
+
+    if( urlPath==='/mute' ){
+      checkLastTime()
+      apple.volume(0)
+      return res.end("mute")
+    }
+
+    if( urlPath==='/config' ){
+      return res.end( JSON.stringify(autoConfig) )
+    }
+
+    res.writeHead(404, {"Content-Type": "text/html"})
+    res.end("404")
+  })
+  .listen(8080,()=>log('server started'))
+}
 
 function checkLastTime(){
   if( lastTime ){

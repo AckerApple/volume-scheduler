@@ -81,13 +81,16 @@ module.exports.cancel = function(){
 }
 
 module.exports.open = function( v ){
-  const script = `
-  tell application v to activate
-  `
-  osascript.execute(script, {v:v}, function(err, result, raw){
-    if (err) return console.error(err)
-    console.log(result, raw)
-  });
+  return new Promise((res,rej)=>{
+    const script = `
+    tell application v to activate
+    `
+    osascript.execute(script, {v:v}, function(err, result, raw){
+      if (err) return rej(rej)
+      res(result)
+      //console.log(result, raw)
+    });
+  })
 }
 
 module.exports.volume = function(v){

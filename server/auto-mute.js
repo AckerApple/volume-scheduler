@@ -87,6 +87,7 @@ function scheduleTimeSheet(timeSheet){
 }
 
 function muteTimeSheet( timeSheet ){
+  config.inBreak = true
   log.log("running mute for", timeSheet.timeLength/60/1000,"mins")
   
   muteForAndSchedule( timeSheet.timeLength )
