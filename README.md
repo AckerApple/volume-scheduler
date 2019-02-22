@@ -1,4 +1,4 @@
-# volumn-scheduler
+# volume-scheduler
 NodeJs cross platform audio controller (currently mac only)
 
 ## Commands
